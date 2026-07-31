@@ -1,0 +1,145 @@
+[
+  {
+    "id": "h4-no-employment",
+    "track": "h4",
+    "title": "H4 dependents cannot accept employment",
+    "summary": "H4 status carries no work authorization on its own. Accepting paid work without an EAD is unauthorized employment and can jeopardise your status and any future application.",
+    "details": [
+      "Only certain H4 spouses of H-1B holders already in the green-card process can obtain an EAD. This does not extend to dependent children.",
+      "'Paid' includes cash, gift cards, stipends, and in-kind compensation — not just payroll.",
+      "Genuine volunteering for a nonprofit is generally acceptable when the role is unpaid, is not a position normally filled by a paid worker, and you receive nothing of value.",
+      "Unpaid academic research, competitions, and coursework are not employment.",
+      "Paid tutoring is NOT permissible. Volunteer tutoring for a nonprofit is."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/h-4-dependents"
+  },
+  {
+    "id": "h4-prize-money",
+    "track": "h4",
+    "title": "Competition prizes are a grey area worth checking",
+    "summary": "Academic competitions are not employment, but cash prizes and scholarship awards sit in murkier territory than a medal does.",
+    "details": [
+      "Entering and winning a science fair, olympiad, or hackathon is participation in an academic activity, not work performed for an employer.",
+      "A cash prize is not wages for services rendered, but it can carry tax consequences and is worth confirming before you accept it.",
+      "Scholarship awards applied directly to tuition are generally the safest form of prize.",
+      "Several listings on GCIS carry a caution note for exactly this reason — check with an immigration attorney before accepting a monetary award."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/h-4-dependents"
+  },
+  {
+    "id": "cpt-basics-and-the-12-month-trap",
+    "track": "f1",
+    "title": "CPT and the 12-month full-time trap",
+    "summary": "CPT is work authorization your DSO grants for training that is an integral part of your curriculum. It is employer-specific and date-specific — and 12 months or more of full-time CPT permanently destroys your post-completion OPT eligibility.",
+    "details": [
+      "You generally must have been enrolled full-time for one full academic year before you are eligible for CPT. Graduate programs that require immediate participation are the exception.",
+      "CPT is authorized by your DSO in SEVIS and printed on your Form I-20 before you start. There is no USCIS application and no EAD card — but you cannot legally work a single day before the authorization is issued or after the end date.",
+      "The trap: students who receive one year or more of full-time CPT become ineligible for post-completion practical training.",
+      "SEVIS defines full-time CPT as more than 20 hours per week. Part-time CPT does not count toward the 12-month bar, no matter how much you do.",
+      "The 12 months is cumulative across all full-time CPT at that education level, not per employer or per term. It is a cliff, not a slope.",
+      "CPT is only needed for training performed inside the US. A summer internship in your home country needs none.",
+      "You must keep a full course of study while school is in session, even on full-time CPT."
+    ],
+    "url": "https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-curricular-practical-training-cpt"
+  },
+  {
+    "id": "opt-twelve-months",
+    "track": "f1",
+    "title": "OPT: 12 months of work authorization per degree level",
+    "summary": "Optional Practical Training gives you up to 12 months of USCIS-authorized work in your field per higher education level. It is granted by USCIS via Form I-765 and an EAD card, not by your school.",
+    "details": [
+      "You get a fresh 12 months each time you move to a higher education level — bachelor's, then master's, then doctorate. Not for a second degree at the same level.",
+      "For post-completion OPT you may file up to 90 days before your program end date and no later than 60 days after it, and within 30 days of your DSO entering the recommendation in SEVIS. Both clocks must be satisfied.",
+      "You cannot start work until the EAD card is in your hands and its start date has arrived. All work must be directly related to your major.",
+      "Pre-completion OPT eats into your post-completion time: a year of part-time pre-completion OPT cuts your remaining full-time OPT by six months.",
+      "Pre-completion OPT is capped at 20 hours per week while school is in session. Post-completion OPT requires at least 20 hours per week of qualifying work.",
+      "Transferring schools or starting a new education level automatically terminates your OPT."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students"
+  },
+  {
+    "id": "stem-opt-extension",
+    "track": "f1",
+    "title": "STEM OPT: 24 extra months, 36 total",
+    "summary": "If your degree is on the DHS STEM Designated Degree Program List and your employer is enrolled in E-Verify, you can extend post-completion OPT by 24 months — three total years of work authorization and three shots at the H-1B lottery.",
+    "details": [
+      "Requirements: you are in a valid period of post-completion OPT; your degree is from an accredited SEVP-certified US school and is on the DHS STEM list; your employer is enrolled and in good standing with E-Verify; and you both complete a Form I-983 training plan.",
+      "File Form I-765 up to 90 days before your current OPT expires, with an I-20 endorsed within the last 60 days.",
+      "If you file on time and your current OPT expires while the extension is pending, your work authorization is automatically extended for up to 180 days.",
+      "You can use a previously earned STEM degree to qualify even if your current OPT is from a non-STEM degree, as long as the training relates to the STEM degree.",
+      "You cannot be your own employer on STEM OPT, and staffing or consulting arrangements often fail the bona fide employer-employee test.",
+      "Reporting is strict: notify your DSO within 10 days of any change to your name, address, email, or employer, and validate every six months regardless."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-extension-for-stem-students-stem-opt"
+  },
+  {
+    "id": "cap-exempt-employers",
+    "track": "f1",
+    "title": "Cap-exempt employers: no lottery, file any time",
+    "summary": "Universities, their affiliated nonprofits, nonprofit research organizations and government research organizations are exempt from the H-1B numerical cap. They can file for you year-round with no lottery.",
+    "details": [
+      "The four qualifying categories are: institutions of higher education; nonprofits related to or affiliated with such an institution; nonprofit research organizations; and governmental research organizations.",
+      "This is the single biggest structural advantage available to an F-1 student. University labs, teaching hospitals and independent research institutes are not competing in a lottery you can lose.",
+      "You do not have to be directly employed by the qualifying entity. If you spend at least half your work time performing duties at one, and those duties further its research or education mission, the exemption can still apply.",
+      "Once you hold cap-exempt H-1B status, an employer can petition for a concurrent cap-subject position without you being counted against the cap.",
+      "The catch: if the cap-exempt job ends, you generally become cap-subject and USCIS may revoke the cap-subject petition. Losing the university job can strand the private-sector one.",
+      "GCIS tags every cap-exempt employer in its listings — look for the green badge."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/h-1b-specialty-occupations"
+  },
+  {
+    "id": "h1b-cap-and-lottery",
+    "track": "f1",
+    "title": "The H-1B cap and the lottery",
+    "summary": "There are 65,000 regular H-1B visas plus 20,000 reserved for holders of a US master's degree or higher. Your employer registers you each spring — you cannot petition for yourself.",
+    "details": [
+      "An employer must register you and, if selected, file the petition. The earliest possible start date is October 1 of the relevant fiscal year.",
+      "A US master's degree or higher gets you into the additional 20,000 advanced-degree pool as well as the regular 65,000 pool — a real and significant advantage.",
+      "Selection is beneficiary-centric: you are counted once no matter how many employers register you.",
+      "Immigration policy in this area is contested and changes frequently. Verify the current registration window, fees, and selection method on uscis.gov before making decisions — do not rely on second-hand summaries, including this one."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/h-1b-specialty-occupations/h-1b-cap-season"
+  },
+  {
+    "id": "on-campus-employment",
+    "track": "f1",
+    "title": "On-campus work: 20 hours, no application needed",
+    "summary": "F-1 students may work on campus up to 20 hours per week while school is in session and full-time during breaks — with no USCIS application, no EAD, and no one-academic-year waiting period.",
+    "details": [
+      "The 20-hour limit is the total across all your on-campus jobs, not per job.",
+      "Unlike CPT and OPT there is no one-year wait. You can begin as early as 30 days before your program start date.",
+      "The work must be on the school's premises, including on-location commercial firms providing direct student services such as the bookstore or cafeteria.",
+      "Working for your campus food-service contractor on campus is allowed; working for that same company off campus is not.",
+      "Your employment must not displace a US citizen or lawful permanent resident.",
+      "No on-campus work is permitted during the grace period after graduation, unless you are continuing to the next program level at the same school."
+    ],
+    "url": "https://www.ice.gov/sevis/employment"
+  },
+  {
+    "id": "opt-unemployment-limit",
+    "track": "f1",
+    "title": "The 90-day unemployment limit on OPT",
+    "summary": "During post-completion OPT you may not accrue more than 90 aggregate days of unemployment. The STEM extension adds 60 more for a cumulative 150 across the entire OPT period — not a fresh 150.",
+    "details": [
+      "During post-completion OPT, F-1 status depends on employment. Exceeding the limit is a status violation, not merely an OPT problem.",
+      "The count is aggregate. Every gap between jobs adds up across the whole OPT period — it does not reset when you find a new job.",
+      "The 150-day figure for STEM OPT is cumulative. Days burned during the initial 12 months carry over into the extension.",
+      "You must report employment to your DSO to stop the clock. Work you are actually doing but have not reported still counts as unemployment in SEVIS.",
+      "These limits apply only to post-completion OPT. Pre-completion OPT is not subject to them."
+    ],
+    "url": "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students"
+  },
+  {
+    "id": "rules-change",
+    "track": "f1",
+    "title": "These rules change — verify before you act",
+    "summary": "F-1 regulation is unusually volatile. Several areas including periods of admission, OPT extension procedures, and H-1B selection have seen significant recent rulemaking.",
+    "details": [
+      "Treat every summary here, and every summary you find elsewhere online, as a starting point rather than an authority.",
+      "Your DSO is the single most reliable and most accessible source you have, and consulting them costs nothing.",
+      "Check studyinthestates.dhs.gov and uscis.gov for current requirements before filing anything or accepting any position.",
+      "Be especially careful with guidance written before the current academic year — procedures that were correct two years ago may no longer be."
+    ],
+    "url": "https://studyinthestates.dhs.gov/"
+  }
+]

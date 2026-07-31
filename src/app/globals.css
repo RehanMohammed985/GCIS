@@ -1,0 +1,320 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   GCIS design language
+   Dark editorial canvas, aurora light, glass surfaces. Deliberately not a
+   card-grid-on-white "app" look — big type, asymmetry, and depth do the work.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --color-void: #050507;
+  --color-ink: #0b0b11;
+  --color-slate-glass: #12121b;
+
+  --color-bone: #f4f1ea;
+  --color-mist: #a9a6b8;
+  --color-faint: #6b6880;
+
+  --color-violet-glow: #7c5cff;
+  --color-cyan-glow: #37d6d6;
+  --color-amber-glow: #ffb257;
+  --color-rose-glow: #ff6b8a;
+
+  --font-display: var(--font-instrument), Georgia, serif;
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* --- Aurora field -------------------------------------------------------- */
+/* Three slow-drifting blobs behind everything. Fixed so content floats over
+   a living background rather than scrolling past a static image. */
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  width: 65vw;
+  height: 65vw;
+  border-radius: 9999px;
+  filter: blur(120px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.aurora::before {
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--color-violet-glow),
+    transparent 65%
+  );
+  top: -22vw;
+  left: -14vw;
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+
+.aurora::after {
+  background: radial-gradient(
+    circle at 65% 40%,
+    var(--color-cyan-glow),
+    transparent 62%
+  );
+  top: 18vh;
+  right: -20vw;
+  animation: drift-b 32s ease-in-out infinite alternate;
+}
+
+.aurora-ember {
+  position: absolute;
+  width: 42vw;
+  height: 42vw;
+  border-radius: 9999px;
+  filter: blur(130px);
+  opacity: 0.32;
+  background: radial-gradient(circle, var(--color-amber-glow), transparent 60%);
+  bottom: -16vw;
+  left: 28vw;
+  animation: drift-c 38s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  to {
+    transform: translate3d(14vw, 9vh, 0) scale(1.18);
+  }
+}
+@keyframes drift-b {
+  to {
+    transform: translate3d(-13vw, 13vh, 0) scale(0.86);
+  }
+}
+@keyframes drift-c {
+  to {
+    transform: translate3d(9vw, -11vh, 0) scale(1.14);
+  }
+}
+
+/* --- Film grain ---------------------------------------------------------- */
+/* Kills the flat-gradient CSS look and gives the dark areas some tooth. */
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Surfaces ------------------------------------------------------------ */
+
+.glass {
+  background: color-mix(in oklab, var(--color-slate-glass) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.07);
+}
+
+.glass-hover {
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    border-color 0.4s ease,
+    background 0.4s ease;
+}
+
+.glass-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgb(255 255 255 / 0.16);
+  background: color-mix(in oklab, var(--color-slate-glass) 82%, transparent);
+}
+
+/* Gradient hairline that only shows on hover — used on opportunity cards. */
+.edge-glow {
+  position: relative;
+}
+
+.edge-glow::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    var(--color-violet-glow),
+    var(--color-cyan-glow),
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.edge-glow:hover::after {
+  opacity: 1;
+}
+
+/* --- Type ---------------------------------------------------------------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-bone) 10%,
+    var(--color-violet-glow) 55%,
+    var(--color-cyan-glow) 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --- Motion -------------------------------------------------------------- */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.9s var(--ease-out-expo) both;
+}
+
+@keyframes sheen {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-faint) 0%,
+    var(--color-bone) 45%,
+    var(--color-faint) 90%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 4.5s linear infinite;
+}
+
+/* Scroll-reveal: toggled by IntersectionObserver in <Reveal>. */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.85s var(--ease-out-expo),
+    transform 0.85s var(--ease-out-expo);
+}
+
+.reveal.shown {
+  opacity: 1;
+  transform: none;
+}
+
+/* Without JS the observer never runs, so don't hide content behind it. */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .aurora::after,
+  .aurora-ember {
+    animation: none;
+  }
+  .rise,
+  .shimmer {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* --- Chrome -------------------------------------------------------------- */
+
+::selection {
+  background: color-mix(in oklab, var(--color-violet-glow) 40%, transparent);
+  color: var(--color-bone);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+::-webkit-scrollbar-thumb {
+  background: #26263a;
+  border-radius: 9999px;
+  border: 2px solid var(--color-void);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a55;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-cyan-glow);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
