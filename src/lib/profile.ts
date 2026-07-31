@@ -71,7 +71,7 @@ export function clearProfile() {
  * Reads the stored profile.
  *
  * `ready` distinguishes "still hydrating" from "definitely no profile" —
- * without it the dashboard flashes its empty state on every load. It is false
+ * without it the matches page flashes its empty state on every load. It is false
  * during server render and hydration, then true, which is exactly the
  * server/client split useSyncExternalStore already models.
  */

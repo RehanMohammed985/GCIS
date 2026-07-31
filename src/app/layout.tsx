@@ -1,28 +1,45 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Archivo, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
+import { SiteFooter } from "@/components/SiteFooter";
+import { ThemeScript } from "@/components/ThemeScript";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["SOFT", "WONK", "opsz"],
+});
+
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  weight: ["400", "500"],
   subsets: ["latin"],
 });
 
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  weight: "400",
-  subsets: ["latin"],
-});
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://gcis.vercel.app";
 
 export const metadata: Metadata = {
-  title: "GCIS — Opportunities that fit your visa",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "GCIS — An index of what you're actually eligible for",
+    template: "%s · GCIS",
+  },
   description:
-    "Research, volunteering, internships and sponsorship-friendly roles matched to international students on H4 and F1 status.",
+    "A verified index of research, volunteering, internships and sponsorship-friendly roles for international students in the U.S. on H4 and F1 status.",
+  openGraph: {
+    title: "GCIS — An index of what you're actually eligible for",
+    description:
+      "Opportunities filtered by what your visa actually permits. Built for H4 and F1 students.",
+    type: "website",
+    siteName: "GCIS",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
@@ -33,26 +50,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
-        <div className="aurora" aria-hidden="true">
-          <div className="aurora-ember" />
-        </div>
-        <div className="grain" aria-hidden="true" />
+        <ThemeScript />
         <SiteNav />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-white/5 mt-32">
-          <div className="mx-auto max-w-6xl px-6 py-10 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-            <p className="text-xs text-faint">
-              GCIS — Global Career Insight System
-            </p>
-            <p className="text-xs text-faint max-w-md sm:text-right">
-              Informational only. Not legal or immigration advice — confirm your
-              work eligibility with your DSO or an immigration attorney.
-            </p>
-          </div>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );

@@ -1,34 +1,82 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------------------
-   GCIS design language
-   Dark editorial canvas, aurora light, glass surfaces. Deliberately not a
-   card-grid-on-white "app" look — big type, asymmetry, and depth do the work.
---------------------------------------------------------------------------- */
+/* ===========================================================================
+   GCIS — "The Index"
 
-@theme {
-  --color-void: #050507;
-  --color-ink: #0b0b11;
-  --color-slate-glass: #12121b;
-
-  --color-bone: #f4f1ea;
-  --color-mist: #a9a6b8;
-  --color-faint: #6b6880;
-
-  --color-violet-glow: #7c5cff;
-  --color-cyan-glow: #37d6d6;
-  --color-amber-glow: #ffb257;
-  --color-rose-glow: #ff6b8a;
-
-  --font-display: var(--font-instrument), Georgia, serif;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-}
+   The visual model is a printed reference catalogue: newsprint stock, ink
+   rules, numbered entries, tabular metadata. Deliberately no gradient meshes,
+   no glassmorphism, no blur — depth comes from rules, weight and spacing.
+   Square corners throughout; the only radius in the system is the pill on
+   interactive chips.
+=========================================================================== */
 
 :root {
+  --paper: #e9e5da;
+  --paper-raised: #f3f0e8;
+  --paper-sunk: #ded9cc;
+  --ink: #17160f;
+  --ink-soft: #4d4a3f;
+  --ink-faint: #857f6d;
+  --rule: rgb(23 22 15 / 0.16);
+  --rule-strong: rgb(23 22 15 / 0.42);
+  --accent: #b03714;
+  --accent-ink: #ffffff;
+  --accent-2: #1c4f6b;
+  --flag: #8a6d1f;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: #131209;
+  --paper-raised: #1c1a12;
+  --paper-sunk: #0d0c06;
+  --ink: #ece7d8;
+  --ink-soft: #a8a28c;
+  --ink-faint: #6f6a58;
+  --rule: rgb(236 231 216 / 0.18);
+  --rule-strong: rgb(236 231 216 / 0.45);
+  --accent: #e2653a;
+  --accent-ink: #17160f;
+  --accent-2: #7fb6cc;
+  --flag: #d3ab4c;
   color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131209;
+    --paper-raised: #1c1a12;
+    --paper-sunk: #0d0c06;
+    --ink: #ece7d8;
+    --ink-soft: #a8a28c;
+    --ink-faint: #6f6a58;
+    --rule: rgb(236 231 216 / 0.18);
+    --rule-strong: rgb(236 231 216 / 0.45);
+    --accent: #e2653a;
+    --accent-ink: #17160f;
+    --accent-2: #7fb6cc;
+    --flag: #d3ab4c;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-2: var(--accent-2);
+  --color-flag: var(--flag);
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 html {
@@ -36,226 +84,234 @@ html {
 }
 
 body {
-  background: var(--color-void);
-  color: var(--color-bone);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
+  font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
-/* --- Aurora field -------------------------------------------------------- */
-/* Three slow-drifting blobs behind everything. Fixed so content floats over
-   a living background rather than scrolling past a static image. */
-
-.aurora {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.aurora::before,
-.aurora::after {
+/* Paper tooth. A single flat fill reads as a screen; the fibre reads as stock. */
+body::before {
   content: "";
-  position: absolute;
-  width: 65vw;
-  height: 65vw;
-  border-radius: 9999px;
-  filter: blur(120px);
-  opacity: 0.5;
-  will-change: transform;
-}
-
-.aurora::before {
-  background: radial-gradient(
-    circle at 30% 30%,
-    var(--color-violet-glow),
-    transparent 65%
-  );
-  top: -22vw;
-  left: -14vw;
-  animation: drift-a 26s ease-in-out infinite alternate;
-}
-
-.aurora::after {
-  background: radial-gradient(
-    circle at 65% 40%,
-    var(--color-cyan-glow),
-    transparent 62%
-  );
-  top: 18vh;
-  right: -20vw;
-  animation: drift-b 32s ease-in-out infinite alternate;
-}
-
-.aurora-ember {
-  position: absolute;
-  width: 42vw;
-  height: 42vw;
-  border-radius: 9999px;
-  filter: blur(130px);
-  opacity: 0.32;
-  background: radial-gradient(circle, var(--color-amber-glow), transparent 60%);
-  bottom: -16vw;
-  left: 28vw;
-  animation: drift-c 38s ease-in-out infinite alternate;
-}
-
-@keyframes drift-a {
-  to {
-    transform: translate3d(14vw, 9vh, 0) scale(1.18);
-  }
-}
-@keyframes drift-b {
-  to {
-    transform: translate3d(-13vw, 13vh, 0) scale(0.86);
-  }
-}
-@keyframes drift-c {
-  to {
-    transform: translate3d(9vw, -11vh, 0) scale(1.14);
-  }
-}
-
-/* --- Film grain ---------------------------------------------------------- */
-/* Kills the flat-gradient CSS look and gives the dark areas some tooth. */
-
-.grain {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
-  opacity: 0.055;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
-/* --- Surfaces ------------------------------------------------------------ */
-
-.glass {
-  background: color-mix(in oklab, var(--color-slate-glass) 62%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgb(255 255 255 / 0.07);
+/* On dark stock the fibre has to add light, not subtract it. */
+:root[data-theme="dark"] body::before {
+  mix-blend-mode: screen;
+  opacity: 0.14;
 }
 
-.glass-hover {
-  transition:
-    transform 0.5s var(--ease-out-expo),
-    border-color 0.4s ease,
-    background 0.4s ease;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body::before {
+    mix-blend-mode: screen;
+    opacity: 0.14;
+  }
 }
 
-.glass-hover:hover {
-  transform: translateY(-4px);
-  border-color: rgb(255 255 255 / 0.16);
-  background: color-mix(in oklab, var(--color-slate-glass) 82%, transparent);
-}
-
-/* Gradient hairline that only shows on hover — used on opportunity cards. */
-.edge-glow {
+body > * {
   position: relative;
-}
-
-.edge-glow::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    130deg,
-    var(--color-violet-glow),
-    var(--color-cyan-glow),
-    transparent 60%
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.45s ease;
-  pointer-events: none;
-}
-
-.edge-glow:hover::after {
-  opacity: 1;
+  z-index: 1;
 }
 
 /* --- Type ---------------------------------------------------------------- */
 
 .display {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
+  font-weight: 600;
+  font-variation-settings: "SOFT" 40, "WONK" 1, "opsz" 120;
+  letter-spacing: -0.022em;
+  line-height: 0.94;
 }
 
-.eyebrow {
+.display-tight {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-variation-settings: "SOFT" 30, "WONK" 1, "opsz" 40;
+  letter-spacing: -0.014em;
+  line-height: 1.06;
+}
+
+/* Uppercase mono, used for every piece of metadata in the system. */
+.label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-faint);
+  font-weight: 500;
 }
 
-.text-gradient {
-  background: linear-gradient(
-    100deg,
-    var(--color-bone) 10%,
-    var(--color-violet-glow) 55%,
-    var(--color-cyan-glow) 90%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Drop the leading zero rail used down the left of numbered sections. */
+.rail-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+/* --- Rules --------------------------------------------------------------- */
+
+.rule-t {
+  border-top: 1px solid var(--rule);
+}
+.rule-b {
+  border-bottom: 1px solid var(--rule);
+}
+.rule-heavy {
+  border-top: 2px solid var(--ink);
+}
+
+/* Section header: label left, hairline filling the remaining width. */
+.rule-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.rule-head::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* --- Surfaces ------------------------------------------------------------ */
+
+.panel {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+}
+
+/* Catalogue row. Hover lifts the ink, not the box — no transform, no shadow. */
+.entry {
+  border-bottom: 1px solid var(--rule);
+  transition:
+    background-color 0.18s ease,
+    padding-left 0.22s ease;
+}
+
+.entry:hover {
+  background: var(--paper-raised);
+  padding-left: 0.75rem;
+}
+
+/* --- Controls ------------------------------------------------------------ */
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-soft);
+  background: transparent;
+  transition:
+    background-color 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.chip[data-on="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  transition:
+    background-color 0.16s ease,
+    color 0.16s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn-ghost:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+/* Underline that draws in from the left on hover. */
+.link-draw {
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.28s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.link-draw:hover {
+  background-size: 100% 1px;
+}
+
+/* --- Track colour coding ------------------------------------------------- */
+/* H4 and F1 are the primary axis of the whole product, so they get the only
+   two accents in the system and are never used decoratively elsewhere. */
+
+.track-h4 {
+  color: var(--accent);
+}
+.track-f1 {
+  color: var(--accent-2);
+}
+.bar-h4 {
+  background: var(--accent);
+}
+.bar-f1 {
+  background: var(--accent-2);
 }
 
 /* --- Motion -------------------------------------------------------------- */
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.rise {
-  animation: rise 0.9s var(--ease-out-expo) both;
-}
-
-@keyframes sheen {
-  to {
-    background-position: 200% center;
-  }
-}
-
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--color-faint) 0%,
-    var(--color-bone) 45%,
-    var(--color-faint) 90%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: sheen 4.5s linear infinite;
-}
-
-/* Scroll-reveal: toggled by IntersectionObserver in <Reveal>. */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(12px);
   transition:
-    opacity 0.85s var(--ease-out-expo),
-    transform 0.85s var(--ease-out-expo);
+    opacity 0.6s cubic-bezier(0.2, 0.7, 0.3, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
 .reveal.shown {
@@ -263,7 +319,6 @@ body {
   transform: none;
 }
 
-/* Without JS the observer never runs, so don't hide content behind it. */
 @media (scripting: none) {
   .reveal {
     opacity: 1;
@@ -272,15 +327,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aurora::before,
-  .aurora::after,
-  .aurora-ember {
-    animation: none;
-  }
-  .rise,
-  .shimmer {
-    animation: none;
-  }
   .reveal {
     opacity: 1;
     transform: none;
@@ -289,32 +335,28 @@ body {
   html {
     scroll-behavior: auto;
   }
+  .entry {
+    transition: none;
+  }
 }
 
 /* --- Chrome -------------------------------------------------------------- */
 
 ::selection {
-  background: color-mix(in oklab, var(--color-violet-glow) 40%, transparent);
-  color: var(--color-bone);
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-void);
-}
-::-webkit-scrollbar-thumb {
-  background: #26263a;
-  border-radius: 9999px;
-  border: 2px solid var(--color-void);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3a3a55;
+  background: var(--ink);
+  color: var(--paper);
 }
 
 *:focus-visible {
-  outline: 2px solid var(--color-cyan-glow);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input::placeholder {
+  color: var(--ink-faint);
+}
+
+/* Hide the native search cancel affordance; the UI provides its own. */
+input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
 }

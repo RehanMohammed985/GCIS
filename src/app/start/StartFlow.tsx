@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { saveProfile } from "@/lib/profile";
+import { loadProfile, saveProfile } from "@/lib/profile";
 import { FIELDS, FIELD_LABELS, type Field, type VisaTrack } from "@/lib/types";
 
 const TRACK_COPY: Record<
@@ -12,25 +12,30 @@ const TRACK_COPY: Record<
   h4: {
     label: "H4 dependent",
     sub: "High school",
-    note: "No work authorization. We'll only show unpaid research, volunteering, competitions and skill-building.",
+    note: "No work authorization. You'll see unpaid research, volunteering, competitions and skill-building — and nothing you could be penalised for accepting.",
   },
   f1: {
     label: "F1 student",
-    sub: "College / university",
-    note: "CPT and OPT eligible. We'll prioritise employers that actually sponsor, and cap-exempt institutions.",
+    sub: "College or university",
+    note: "CPT and OPT eligible. You'll see internships and research, with cap-exempt institutions ranked first because they skip the H-1B lottery.",
   },
 };
+
+const STEPS = ["Status", "Subjects", "Location"];
 
 export function StartFlow() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const initialTrack = params.get("track");
-  const [track, setTrack] = useState<VisaTrack | null>(
-    initialTrack === "h4" || initialTrack === "f1" ? initialTrack : null,
-  );
-  const [fields, setFields] = useState<Field[]>([]);
-  const [remoteOnly, setRemoteOnly] = useState(false);
+  // Re-entering from "Edit" should prefill rather than start from blank.
+  const existing = typeof window !== "undefined" ? loadProfile() : null;
+  const fromUrl = params.get("track");
+  const initialTrack =
+    fromUrl === "h4" || fromUrl === "f1" ? fromUrl : (existing?.track ?? null);
+
+  const [track, setTrack] = useState<VisaTrack | null>(initialTrack);
+  const [fields, setFields] = useState<Field[]>(existing?.fields ?? []);
+  const [remoteOnly, setRemoteOnly] = useState(existing?.remoteOnly ?? false);
   const [step, setStep] = useState(initialTrack ? 2 : 1);
 
   function toggleField(f: Field) {
@@ -47,36 +52,43 @@ export function StartFlow() {
       remoteOnly,
       createdAt: new Date().toISOString(),
     });
-    router.push("/dashboard");
+    router.push("/matches");
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
-      {/* progress */}
-      <div className="flex items-center gap-3 mb-14">
-        {[1, 2, 3].map((n) => (
-          <div
-            key={n}
-            className={`h-1 flex-1 rounded-full transition-colors duration-500 ${
-              n <= step ? "bg-cyan-glow" : "bg-white/10"
-            }`}
-          />
-        ))}
-        <span className="font-mono text-xs text-faint ml-2">{step}/3</span>
-      </div>
+    <div className="mx-auto max-w-3xl px-5 sm:px-8 pt-14 pb-28">
+      {/* Step rail */}
+      <ol className="flex items-stretch gap-px bg-rule mb-14">
+        {STEPS.map((s, i) => {
+          const n = i + 1;
+          return (
+            <li
+              key={s}
+              className={`flex-1 bg-paper px-3 py-3 ${n <= step ? "" : "opacity-40"}`}
+            >
+              <div
+                className={`h-0.5 mb-3 ${n <= step ? "bg-ink" : "bg-rule"}`}
+              />
+              <span className="label text-ink-faint">
+                {String(n).padStart(2, "0")}
+              </span>
+              <span className="label text-ink ml-2">{s}</span>
+            </li>
+          );
+        })}
+      </ol>
 
       {step === 1 && (
-        <div className="rise">
-          <p className="eyebrow mb-6">Step one</p>
-          <h1 className="display text-5xl sm:text-6xl mb-4">
-            What&apos;s your status?
+        <div>
+          <h1 className="display text-[2.8rem] sm:text-[4rem] mb-5 max-w-[14ch]">
+            What is your status?
           </h1>
-          <p className="text-mist mb-12 max-w-lg leading-relaxed">
-            This is a legal boundary, not a preference — it determines what
-            you&apos;re permitted to accept.
+          <p className="text-ink-soft mb-12 max-w-lg leading-relaxed">
+            This is a legal boundary, not a preference. It decides what you are
+            permitted to accept, so everything downstream depends on it.
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-px bg-rule">
             {(["h4", "f1"] as const).map((t) => (
               <button
                 key={t}
@@ -84,13 +96,16 @@ export function StartFlow() {
                   setTrack(t);
                   setStep(2);
                 }}
-                className="glass glass-hover edge-glow rounded-2xl p-8 text-left"
+                className="bg-paper hover:bg-paper-raised transition-colors p-8 text-left group"
               >
-                <p className="eyebrow mb-3">{TRACK_COPY[t].sub}</p>
-                <h2 className="font-display text-3xl mb-4">
+                <div
+                  className={`h-1 w-12 mb-6 ${t === "h4" ? "bar-h4" : "bar-f1"}`}
+                />
+                <p className="label text-ink-faint mb-3">{TRACK_COPY[t].sub}</p>
+                <h2 className="display-tight text-3xl mb-4">
                   {TRACK_COPY[t].label}
                 </h2>
-                <p className="text-sm text-mist leading-relaxed">
+                <p className="text-sm text-ink-soft leading-relaxed">
                   {TRACK_COPY[t].note}
                 </p>
               </button>
@@ -100,103 +115,97 @@ export function StartFlow() {
       )}
 
       {step === 2 && track && (
-        <div className="rise">
-          <p className="eyebrow mb-6">Step two</p>
-          <h1 className="display text-5xl sm:text-6xl mb-4">
-            {track === "f1" ? "What's your major?" : "What pulls you in?"}
+        <div>
+          <h1 className="display text-[2.8rem] sm:text-[4rem] mb-5 max-w-[16ch]">
+            {track === "f1" ? "What do you study?" : "What pulls you in?"}
           </h1>
-          <p className="text-mist mb-12 max-w-lg leading-relaxed">
+          <p className="text-ink-soft mb-12 max-w-lg leading-relaxed">
             {track === "f1"
-              ? "Pick your field of study, plus anything adjacent you'd consider."
-              : "Pick the subjects you'd genuinely spend a Saturday on. Choose as many as you like."}
+              ? "Your field of study, plus anything adjacent you would genuinely consider."
+              : "The subjects you would spend a free Saturday on. Pick as many as apply — a wider net finds more."}
           </p>
 
-          <div className="flex flex-wrap gap-2.5 mb-12">
-            {FIELDS.map((f) => {
-              const on = fields.includes(f);
-              return (
-                <button
-                  key={f}
-                  onClick={() => toggleField(f)}
-                  className={`px-4 py-2.5 rounded-full border text-sm transition-all ${
-                    on
-                      ? "bg-bone text-void border-bone"
-                      : "border-white/15 text-mist hover:border-white/35 hover:text-bone"
-                  }`}
-                >
-                  {FIELD_LABELS[f]}
-                </button>
-              );
-            })}
+          <div className="flex flex-wrap gap-2 mb-12">
+            {FIELDS.map((f) => (
+              <button
+                key={f}
+                className="chip"
+                data-on={fields.includes(f)}
+                onClick={() => toggleField(f)}
+              >
+                {FIELD_LABELS[f]}
+              </button>
+            ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setStep(1)}
-              className="px-6 py-3 rounded-full border border-white/15 text-mist hover:text-bone transition-colors"
-            >
+          <div className="flex flex-wrap items-center gap-4 rule-t pt-6">
+            <button onClick={() => setStep(1)} className="btn btn-ghost">
               Back
             </button>
             <button
               onClick={() => setStep(3)}
               disabled={fields.length === 0}
-              className="px-7 py-3 rounded-full bg-bone text-void font-medium disabled:opacity-25 disabled:cursor-not-allowed hover:bg-white transition-all"
+              className="btn disabled:opacity-30 disabled:cursor-not-allowed"
             >
               Continue
             </button>
-            {fields.length === 0 && (
-              <span className="text-xs text-faint">Pick at least one</span>
-            )}
+            <span className="label text-ink-faint">
+              {fields.length === 0
+                ? "Pick at least one"
+                : `${fields.length} selected`}
+            </span>
           </div>
         </div>
       )}
 
       {step === 3 && track && (
-        <div className="rise">
-          <p className="eyebrow mb-6">Step three</p>
-          <h1 className="display text-5xl sm:text-6xl mb-4">
-            Any location limits?
+        <div>
+          <h1 className="display text-[2.8rem] sm:text-[4rem] mb-5 max-w-[14ch]">
+            Can you travel to it?
           </h1>
-          <p className="text-mist mb-12 max-w-lg leading-relaxed">
-            Remote-friendly matters a lot if you can&apos;t relocate or drive
-            yourself to a lab every week.
+          <p className="text-ink-soft mb-12 max-w-lg leading-relaxed">
+            Remote-only is treated as a hard filter, not a preference — so
+            choose it only if you genuinely cannot attend in person. A lot of
+            the strongest research happens on campus.
           </p>
 
-          <div className="flex flex-col gap-3 mb-12">
+          <div className="grid gap-px bg-rule mb-12">
             {[
-              { v: false, t: "Anywhere is fine", d: "Show me everything" },
+              {
+                v: false,
+                t: "Anywhere is fine",
+                d: "Show on-site programs as well as remote ones",
+              },
               {
                 v: true,
                 t: "Remote only",
-                d: "I need to participate from home",
+                d: "Hide anything I would have to attend in person",
               },
             ].map((opt) => (
               <button
                 key={String(opt.v)}
                 onClick={() => setRemoteOnly(opt.v)}
-                className={`glass rounded-2xl p-6 text-left border transition-all ${
+                className={`p-7 text-left transition-colors ${
                   remoteOnly === opt.v
-                    ? "border-cyan-glow/50 bg-cyan-glow/5"
-                    : "border-white/8 hover:border-white/20"
+                    ? "bg-ink text-paper"
+                    : "bg-paper hover:bg-paper-raised"
                 }`}
               >
-                <div className="font-display text-2xl mb-1">{opt.t}</div>
-                <div className="text-sm text-mist">{opt.d}</div>
+                <div className="display-tight text-2xl mb-1">{opt.t}</div>
+                <div
+                  className={`text-sm ${remoteOnly === opt.v ? "opacity-70" : "text-ink-soft"}`}
+                >
+                  {opt.d}
+                </div>
               </button>
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setStep(2)}
-              className="px-6 py-3 rounded-full border border-white/15 text-mist hover:text-bone transition-colors"
-            >
+          <div className="flex flex-wrap items-center gap-4 rule-t pt-6">
+            <button onClick={() => setStep(2)} className="btn btn-ghost">
               Back
             </button>
-            <button
-              onClick={finish}
-              className="px-7 py-3 rounded-full bg-bone text-void font-medium hover:bg-white transition-all hover:scale-[1.03]"
-            >
+            <button onClick={finish} className="btn">
               Show my matches →
             </button>
           </div>
